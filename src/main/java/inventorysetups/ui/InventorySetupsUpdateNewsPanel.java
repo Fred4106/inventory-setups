@@ -26,8 +26,11 @@ public class InventorySetupsUpdateNewsPanel extends JPanel
 
 	private static final String DONATION_LINK = "https://www.buymeacoffee.com/dillydill123";
 
+	private final InventorySetupsPlugin plugin;
+
 	InventorySetupsUpdateNewsPanel(InventorySetupsPlugin plugin, InventorySetupsPluginPanel panel)
 	{
+		this.plugin = plugin;
 		final JLabel welcomeText = new JLabel("Inventory Setups " + plugin.getCurrentVersionString());
 		welcomeText.setFont(FontManager.getRunescapeBoldFont());
 		welcomeText.setHorizontalAlignment(JLabel.CENTER);
@@ -77,7 +80,7 @@ public class InventorySetupsUpdateNewsPanel extends JPanel
 		final JButton returnToSetups = new JButton("Return to Setups");
 		returnToSetups.addActionListener(e ->
 		{
-			plugin.setSavedVersionString(plugin.getCurrentVersionString());
+			this.plugin.setSavedVersionString(this.plugin.getCurrentVersionString());
 			panel.showCorrectPanel();
 		});
 		final JLabel clickButtonToLeave = new JLabel("Click here to hide this window");
@@ -137,10 +140,7 @@ public class InventorySetupsUpdateNewsPanel extends JPanel
 		final JPanel patchTitlePanel = new JPanel(new BorderLayout());
 		patchTitlePanel.add(patchNotesLabel, BorderLayout.NORTH);
 
-		String updateText =	"Added a config option for bottom to top ZigZag layouts.\n\n" +
-							"Hotkeys are now disabled during chat box inputs (bank searches, PMs, etc.) by default. A new config option has been added to revert this.\n\n" +
-							"Fixed some issues with fuzzy items adding a placeholder incorrectly.\n\n" +
-							"As a reminder, layouts can be reset by right clicking the \"Show worn items\" button in the bank and navigating to \"Auto Layout\". Items can be moved freely in layouts without affecting their real positions in the bank.";
+		String updateText = this.plugin.getPatchNotesString();
 
 		JTextArea textArea = new JTextArea(2, 20);
 		textArea.setText(updateText);

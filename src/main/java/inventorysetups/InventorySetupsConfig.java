@@ -28,6 +28,7 @@ import static inventorysetups.InventorySetupsPlugin.CONFIG_KEY_ENABLE_LAYOUT_WAR
 import static inventorysetups.InventorySetupsPlugin.CONFIG_KEY_HIDE_BUTTON;
 import static inventorysetups.InventorySetupsPlugin.CONFIG_KEY_LAYOUT_DEFAULT;
 import static inventorysetups.InventorySetupsPlugin.CONFIG_KEY_PERSIST_HOTKEYS_CHAT_INPUT;
+import static inventorysetups.InventorySetupsPlugin.CONFIG_KEY_USE_OLD_ITEM_SEARCH;
 import static inventorysetups.InventorySetupsPlugin.CONFIG_KEY_ZIGZAG_TYPE;
 import static inventorysetups.InventorySetupsPlugin.CONFIG_KEY_LAYOUT_DUPLICATES;
 import static inventorysetups.InventorySetupsPlugin.CONFIG_KEY_MANUAL_BANK_FILTER;
@@ -209,6 +210,17 @@ public interface InventorySetupsConfig extends Config
 	default InventorySetupsStackCompareID stackCompareType()
 	{
 		return InventorySetupsStackCompareID.None;
+	}
+
+	@ConfigItem(
+			keyName = "attackOption",
+			name = "Default Attack Option",
+			description = "Configures new setups to include the player's current attack option",
+			section = defaultSection
+	)
+	default boolean attackOption()
+	{
+		return false;
 	}
 
 	@ConfigItem(
@@ -537,6 +549,14 @@ public interface InventorySetupsConfig extends Config
 		return true;
 	}
 
-
-
+	@ConfigItem(
+			keyName = CONFIG_KEY_USE_OLD_ITEM_SEARCH,
+			name = "Use Old Item Search",
+			description = "Use original item search instead of the GE search.",
+			section = otherSection
+	)
+	default boolean useOldItemSearch()
+	{
+		return false;
+	}
 }

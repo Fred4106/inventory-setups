@@ -30,6 +30,7 @@ Contents
   - [The Unassigned Section](#unassigned-section)
 - [Exporting and Importing](#exporting-and-importing-setups-and-sections)
 - [Other Plugin Compatibilities](#other-plugin-compatibilities)
+  - [PluginMessage API](#pluginmessage-api-for-plugin-developers)
 - [Configuration Settings](#configuration-settings)
 - [Data Storage](#data-storage)
 - [Support and Suggestions](#support-and-suggestions)
@@ -56,7 +57,7 @@ The overview panel contains all the setups and options to manipulate them.
 
 ### Viewing a Setup
 
-You can view the setup by clicking on the view setups button (the eye icon). You can see that your inventory, equipment, spellbook, additional filtered items (explained later) and notes are saved in the setup. Additional ammunition containers like the rune pouch, bolt pouch, and quiver will also be displayed if present.
+You can view the setup by clicking on the view setups button (the eye icon). You can see that your inventory, equipment, spellbook, attack option, additional filtered items (explained later), and notes are saved in the setup. Additional ammunition containers like the rune pouch, bolt pouch, and quiver will also be displayed if present.
 
 ![View Setup](readme_images_and_gifs/view_setup_button.png)
 
@@ -153,6 +154,12 @@ You can also refresh an entire setup by using the refresh icon when viewing a se
 You can update the spellbook by right-clicking the slot and choosing the desired spellbook. There is also an option for none if you do not care about the spellbook for a particular setup.
 
 ![Update Spellbook](readme_images_and_gifs/spellbook.png)
+
+The Attack Option can be similarly updated or removed by right-clicking the weapon slot and using the Attack Option submenu.
+
+The attack option is specific to the weapon category and style selected. Instead of just "Aggressive" or "Accurate", the information saved is the option like "Chop", "Slash", or "Block". This encodes both the type of XP you wish to gain along with the combat style.
+
+![Update Attack Option](readme_images_and_gifs/update_attack_option.gif)
 
 ## Bank Filtering and Layouts
 
@@ -347,6 +354,23 @@ You can export an Inventory Setup to Bank Tag format by right-clicking the expor
 The Bank Tags plugin must be ON to use all features of Inventory Setups, specifically bank layouts and filtering. Inventory Setups will warn the user if filtering and layouts cannot be used. This warning will also provide an option to turn on Bank Tags for you.
 
 Hub Plugin Bank Tag Layouts is not required for Inventory Setups anymore. If you were only using the plugin for Inventory Setups, it's recommended that you uninstall the plugin. If you have layout data from Bank Tag Layouts, Inventory Setups will attempt to migrate the layout data the first time you use the plugin.
+
+### PluginMessage API for Plugin Developers
+
+Other plugins can integrate with Inventory Setups by posting [`PluginMessage`](https://github.com/runelite/runelite/blob/master/runelite-client/src/main/java/net/runelite/client/events/PluginMessage.java) events on the EventBus with the `inventory-setups` namespace.
+
+The API broadcasts the following messages:
+* `setups-changed`: The list of setups has changed. This could mean a setup was added, deleted, or its name was updated.
+* `active-setup-changed`: The active setup has changed, or its contents (inventory, equipment, etc.) have been modified.
+
+The API can receive the following messages and provide data or act upon the message:
+* `get-setups`: A list of all setups.
+* `get-active-setup-contents`: Get the contents (inventory, equipment, etc.) of the active setup.
+* `view`: Open a setup.
+* `clear`: Close the current setup.
+
+The message names, payload keys, and usage details are documented in [`InventorySetupsPluginMessageHandler`](src/main/java/inventorysetups/InventorySetupsPluginMessageHandler.java).
+
 ## Configuration Settings
 
 In the settings of Inventory Setups, you can change default setup options, key binds, ground item menu options, and other miscellaneous settings.
@@ -355,6 +379,7 @@ In the settings of Inventory Setups, you can change default setup options, key b
 
 ### Default Setup Options
 
+* **Default Attack Option** - Enabling this will make it so all newly created setups will save the current attack option
 * **Default Display Color** - The default color that will be used as a display color for new setups. The option above must be enabled
 * **Default Enable Display Color** - Enabling this will make it so all newly created setups will have the default display color. The display color is the thin colored line on Standard and Compact setup panels
 
@@ -401,6 +426,7 @@ Hint: You can right-click the paint bucket to delete the color of a setup or sec
 * **Section Mode** - Toggles section mode. Can also be selected on the main window of Inventory Setups
 * **Show Worn Item Filter** - Changes which setups show up on the "show worn items" button when right-clicked
 * **Sorting Mode** - The current sorting mode. It is equivalent to pressing the sorting mode button on the overview panel
+* **Use Old Item Search** - Use the old item search instead of the new GE Search
 * **Worn Items Section Submenus** - Allows section submenus when right-clicking the "show worn items" button
 
 ![Section Submenus](readme_images_and_gifs/section_submenus.png)
@@ -417,11 +443,19 @@ Layout data is stored under the Bank Tag config group. An example would look lik
 
 Inventory Setups will sync your data to the cloud if you are signed in to RuneLite. It is still a good idea to mass export your setups every once in a while, especially if you aren't signed in to RuneLite.
 
-## Support and Suggestions
+## Support, Suggestions, and Contributions
 
-If you need help, have any suggestions, or notice any bugs, you can comment them here in the issues section. If you do not have a github account, you can send a message to this reddit account: https://www.reddit.com/user/rlis1234
+If you need help, have any suggestions, or notice any bugs, you can comment them here in the issues section. If you do not have a GitHub account, you can send a message to this reddit account: https://www.reddit.com/user/rlis1234. Making a GitHub issue is much more likely to be seen.
 
-### Donations
+### Contributing
+
+Contributions to Inventory Setups are welcome. It is highly recommended to create an issue first before writing any code to start a discussion about a potential feature. Please disclose any usage of AI related tools in all pull requests.
+
+Smaller features, like new configuration options or bug fixes are more likely to be accepted as compared to large feature updates, in particular those that require modification to the UI.
+
+You may also write a new PluginHub plugin that interacts with Inventory Setups using the [PluginMessage API](#pluginmessage-api-for-plugin-developers).
+
+## Donations
 
 Inventory Setups was developed by me in my free time (200+ hours of work). I did it for fun and to make something that others and myself would enjoy using without any intention of making money. However, if you'd like to donate to me, you can use [this link](https://www.buymeacoffee.com/dillydill123). Any amount is greatly appreciated!
 

@@ -1,6 +1,7 @@
 package inventorysetups;
 
 import com.google.inject.Guice;
+import com.google.inject.name.Named;
 import com.google.inject.testing.fieldbinder.Bind;
 import com.google.inject.testing.fieldbinder.BoundFieldModule;
 
@@ -12,30 +13,23 @@ import java.util.Map;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.gameval.ItemID;
+import net.runelite.client.config.ChatColorConfig;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.config.RuneLiteConfig;
 import net.runelite.client.game.ItemManager;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import net.runelite.client.plugins.banktags.BankTagsConfig;
-import net.runelite.client.plugins.banktags.BankTagsPlugin;
-
-
 import net.runelite.client.plugins.PluginManager;
 import net.runelite.client.plugins.banktags.BankTagsService;
 import net.runelite.client.plugins.banktags.TagManager;
 import net.runelite.client.plugins.banktags.tabs.LayoutManager;
-import net.runelite.client.plugins.banktags.tabs.TabInterface;
 import net.runelite.client.ui.ClientToolbar;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -68,18 +62,6 @@ public class InventorySetupsUnitTest
 
 	@Mock
 	@Bind
-	private BankTagsPlugin bankTagsPlugin;
-
-	@Mock
-	@Bind
-	private BankTagsConfig bankTagsConfig;
-
-	@Mock
-	@Bind
-	private TabInterface tabInterface;
-
-	@Mock
-	@Bind
 	private BankTagsService bankTagsService;
 
 	@Mock
@@ -96,6 +78,14 @@ public class InventorySetupsUnitTest
 
 	@Inject
 	private InventorySetupsPlugin inventorySetupsPlugin;
+
+	@Mock
+	@Bind
+	private ChatColorConfig chatColorConfig;
+
+	@Bind
+	@Named("developerMode")
+	private Boolean developerMode = false;
 
 	@Before
 	public void before()
@@ -132,7 +122,7 @@ public class InventorySetupsUnitTest
 		Map<Integer, InventorySetupsItem> addItems = new HashMap<>();
 		InventorySetup setup = new InventorySetup(inventory, equipment, runePouch, boltPouch, quiver, addItems, "Test",
 												"", inventorySetupsConfig.highlightColor(), false,
-												inventorySetupsConfig.displayColor(), false,false, 0, false, -1);
+												inventorySetupsConfig.displayColor(), false,false, 0, false, -1, "");
 		inventorySetupsPlugin.startUp();
 		assertFalse(inventorySetupsPlugin.setupContainsItem(setup, ItemID.COAL, true, true));
 	}
