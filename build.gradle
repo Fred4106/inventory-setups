@@ -13,7 +13,7 @@ repositories {
     mavenCentral()
 }
 
-def runeLiteVersion = 'latest.release'
+def runeLiteVersion = '1.13.8'
 def pluginMainClass = 'inventorysetups.InventorySetupsPluginTest'
 // Test latest RL master
 // - Pull and build latest RL master
@@ -41,6 +41,8 @@ dependencies {
 }
 
 group = 'inventorysetups'
+version = 'v1.26.0'
+sourceCompatibility = '1.8'
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
